@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ProjectForm from "@/components/projects/ProjectForm";
-import { ProjectFormData } from "types";
+import { ProjectFormData } from "@/types/index";
+import { createproject } from "@/api/ProjectApi";
 const CreateProjectView = () => {
   //estos son los valores iniciales del form
   const initialValues: ProjectFormData = {
@@ -17,7 +18,7 @@ const CreateProjectView = () => {
   } = useForm({ defaultValues: initialValues });
   //esta es la función que se pasa en el handle submit de react-hook-form
   const handleForm = (data: ProjectFormData) => {
-    console.log(data);
+    createproject(data);
   };
 
   //-----el no validate en el form deshanilita la validación de hmtl5 para que la hagas vos
