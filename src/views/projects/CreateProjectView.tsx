@@ -4,6 +4,9 @@ import ProjectForm from "@/components/projects/ProjectForm";
 import { ProjectFormData } from "@/types/index";
 import { createproject } from "@/api/ProjectApi";
 import { toast } from "react-toastify";
+//useMutation es para todos los post,put,patch y delete
+import { useMutation } from "@tanstack/react-query";
+
 const CreateProjectView = () => {
   const navigate = useNavigate();
   //estos son los valores iniciales del form
@@ -18,11 +21,20 @@ const CreateProjectView = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
+  //esto es de tanstak creeme que use mutation tiene muchas opciones, busca en la doc si queres otra cosa
+  const mutation = useMutation({
+    //la función que ejecutara
+    mutationFn: createproject,
+    onError: () => {},
+    onSuccess: (data) => {
+      toast.success(data);
+      navigate("/");
+    },
+  });
   //esta es la función que se pasa en el handle submit de react-hook-form
   const handleForm = async (data: ProjectFormData) => {
-    const response = await createproject(data);
-    toast.success(response);
-    navigate("/");
+    //aca indicas cuando hacer la mutación (se esta haciendo asincrona, sincrona se llama mutation)
+    await mutation.mutateAsync(data);
   };
 
   //-----el no validate en el form deshanilita la validación de hmtl5 para que la hagas vos
