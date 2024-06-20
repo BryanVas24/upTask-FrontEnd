@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import ProjectForm from "@/components/projects/ProjectForm";
 import { ProjectFormData } from "@/types/index";
 import { createproject } from "@/api/ProjectApi";
+import { toast } from "react-toastify";
 const CreateProjectView = () => {
   const navigate = useNavigate();
   //estos son los valores iniciales del form
@@ -19,7 +20,8 @@ const CreateProjectView = () => {
   } = useForm({ defaultValues: initialValues });
   //esta es la función que se pasa en el handle submit de react-hook-form
   const handleForm = async (data: ProjectFormData) => {
-    await createproject(data);
+    const response = await createproject(data);
+    toast.success(response);
     navigate("/");
   };
 
