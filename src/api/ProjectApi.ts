@@ -11,3 +11,15 @@ export async function createproject(formData: ProjectFormData) {
     }
   }
 }
+
+export async function getAllProjects() {
+  try {
+    //recorda que en axios siempre es get el metodo por defecto
+    const { data } = await api("/projects");
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+}
