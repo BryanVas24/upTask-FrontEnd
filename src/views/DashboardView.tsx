@@ -22,14 +22,14 @@ const DashboardView = () => {
         <p className="text-2xl font-light text-gray-500 mt-5">
           Maneja y administra tus proyectos
         </p>
-        <div className="my-5">
+        <nav className="my-5">
           <Link
             to={"/projects/create"}
             className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold transition-colors cursor-pointer"
           >
             Nuevo proyecto
           </Link>
-        </div>
+        </nav>
         {data.length ? (
           <ul
             role="list"
@@ -85,7 +85,7 @@ const DashboardView = () => {
                         </Menu.Item>
                         <Menu.Item>
                           <Link
-                            to={``}
+                            to={`/projects/${project._id}/edit`}
                             className="block px-3 py-1 text-sm leading-6 text-gray-900"
                           >
                             Editar Proyecto
