@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getOneProject } from "@/api/ProjectApi";
+import EditProjectForm from "@/components/projects/EditProjectForm";
 const EditProjectView = () => {
   //sirve para obtener datos de la url
   const params = useParams();
@@ -14,19 +15,29 @@ const EditProjectView = () => {
     //son las veces que intentara hacer el llamado
     retry: false,
   });
+  //si esta cargando
   if (isLoading) return <div>Buscando proyecto...</div>;
+  //si ocurre un error
   if (error)
     return (
       <div className="text-center">
         <h2 className="font-bold text-red-600 text-2xl">
           Error al obtener el proyecto :(
         </h2>{" "}
-        {(error as Error).message}
+        <br />
+        <p>{(error as Error).message}</p> <br />
+        <Link
+          to={"/"}
+          className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold transition-colors cursor-pointer"
+        >
+          Volver a inicio
+        </Link>
       </div>
     );
 
   console.log(data);
-  return <div>pipip</div>;
+  //si data existe retorna este componente
+  if (data) return <EditProjectForm />;
 };
 
 export default EditProjectView;
