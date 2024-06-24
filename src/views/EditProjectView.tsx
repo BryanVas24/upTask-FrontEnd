@@ -35,9 +35,8 @@ const EditProjectView = () => {
       </div>
     );
 
-  console.log(data);
   //si data existe retorna este componente
-  if (data) return <EditProjectForm />;
+  if (data) return <EditProjectForm data={data} />;
 };
 
 export default EditProjectView;
