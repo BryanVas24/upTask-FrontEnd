@@ -33,7 +33,7 @@ const ProjectDetailsView = () => {
         </p>
         <nav className="my-5 flex gap-3">
           <button
-            onClick={() => navigate("?newTask=true")}
+            onClick={() => navigate(location.pathname + "?newTask=true")}
             className="bg-purple-400 hover:bg-purple-500 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
           >
             Agregar tarea
