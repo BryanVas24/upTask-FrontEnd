@@ -2,14 +2,26 @@ import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { useQuery } from "@tanstack/react-query";
-import { getAllProjects } from "@/api/ProjectApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteProject, getAllProjects } from "@/api/ProjectApi";
+import { toast } from "react-toastify";
 const DashboardView = () => {
   //aca estas destructurando datos de useQuery
   const { data, isLoading } = useQuery({
     //el querykey debe ser unico, literalmente no lo podes repetir ni en otro componente
     queryKey: ["projects"],
     queryFn: getAllProjects,
+  });
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: deleteProject,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success(data);
+    },
   });
 
   if (isLoading) return "Cargando...";
@@ -95,7 +107,9 @@ const DashboardView = () => {
                           <button
                             type="button"
                             className="block px-3 py-1 text-sm leading-6 text-red-500"
-                            onClick={() => {}}
+                            onClick={() => {
+                              mutate(project._id);
+                            }}
                           >
                             Eliminar Proyecto
                           </button>
