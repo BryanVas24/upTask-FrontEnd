@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 
-import { ProjectFormData } from "@/types/index";
+import { Project, ProjectFormData } from "@/types/index";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { updateProject } from "@/api/ProjectApi";
 
 type EditProjectFormProps = {
   data: ProjectFormData;
+  projectId: Project["_id"];
 };
-const EditProjectForm = ({ data }: EditProjectFormProps) => {
+const EditProjectForm = ({ data, projectId }: EditProjectFormProps) => {
   const { clientName, projectName, description } = data;
 
   //esto es de react-hook form y ahora estas metiendo los initial values de un solo
@@ -23,8 +26,15 @@ const EditProjectForm = ({ data }: EditProjectFormProps) => {
     },
   });
 
+  const { mutate } = useMutation({
+    mutationFn: updateProject,
+    onError: () => {},
+    onSuccess: () => {},
+  });
   const handleForm = (formData: ProjectFormData) => {
-    console.log(formData);
+    //asi se pasan 2 parametros en un mutation
+    const data = { formData, projectId };
+    mutate(data);
   };
   return (
     <>
