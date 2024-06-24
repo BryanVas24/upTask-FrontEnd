@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Project, ProjectFormData } from "@/types/index";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProject } from "@/api/ProjectApi";
 import { toast } from "react-toastify";
 
@@ -27,12 +27,17 @@ const EditProjectForm = ({ data, projectId }: EditProjectFormProps) => {
     },
   });
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: updateProject,
     onError: (error) => {
       toast.error(error.message);
     },
     onSuccess: (data) => {
+      //para que haga un nuevo query a la hora de volverse a ocupar (queryKey siempre recibe un array)
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      //basicamente lo que hace invalidateQueries es un nuevo fetch porque se almacenan las queryKey con los datos previos
+      queryClient.invalidateQueries({ queryKey: ["editProject", projectId] });
       toast.success(data);
       navigate("/");
     },
