@@ -1,6 +1,10 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import TaskForm from "./TaskForm";
+import { TaskFormData } from "@/types/index";
+import { error } from "console";
 
 export default function AddTaskModal() {
   const navigate = useNavigate();
@@ -12,6 +16,23 @@ export default function AddTaskModal() {
   const modalTask = queryParams.get("newTask");
 
   const show = modalTask ? true : false;
+  //valores iniciales del formulario de crear tareas
+  const initialValues: TaskFormData = {
+    name: "",
+    description: "",
+  };
+  //asignando los datos iniciales y extrayendo register y handleSubmit
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+  });
+
+  const handleCreateTask = (FormData: TaskFormData) => {
+    console.log(FormData);
+  };
   /*En en el onClose manda a la misma url en la que se encuentra y elimina
   el queryString de la url*/
   return (
@@ -54,6 +75,17 @@ export default function AddTaskModal() {
                     Llena el formulario y crea {""}
                     <span className="text-fuchsia-600">una tarea</span>
                   </p>
+                  <form
+                    onSubmit={handleSubmit(handleCreateTask)}
+                    className="mt-10 space-y-3"
+                  >
+                    <TaskForm register={register} errors={errors} />
+                    <input
+                      type="submit"
+                      value="Guardar tarea"
+                      className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors"
+                    />
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
