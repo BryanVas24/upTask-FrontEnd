@@ -1,6 +1,7 @@
 import { getTaskByID } from "@/api/TaskApi";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation, useParams } from "react-router-dom";
+import EditTaskModal from "./EditTaskModal";
 
 export default function EditTaskData() {
   //extrayendo el id del proyecto
@@ -14,8 +15,9 @@ export default function EditTaskData() {
   const { data } = useQuery({
     queryKey: ["task", taskId],
     queryFn: () => getTaskByID({ projectId, taskId }),
+    //esto funciona en base a una condición solo retorna boleans y los !! son para convertirlos a boolean
+    enabled: !!taskId,
   });
 
-  console.log(data);
-  return <div></div>;
+  if (data) return <EditTaskModal />;
 }
