@@ -2,6 +2,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getOneProject } from "@/api/ProjectApi";
 import AddTaskModal from "@/components/tasks/AddTaskModal";
+import TaskList from "@/components/tasks/TaskList";
 
 const ProjectDetailsView = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const ProjectDetailsView = () => {
             Agregar tarea
           </button>
         </nav>
+        <TaskList tasks={data.tasks} />
         <AddTaskModal />
       </>
     );
