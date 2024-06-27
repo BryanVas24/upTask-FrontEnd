@@ -1,12 +1,18 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import TaskForm from "./TaskForm";
 import { TaskFormData } from "@/types/index";
-import { error } from "console";
+import { useMutation } from "@tanstack/react-query";
+import { createTask } from "@/api/TaskApi";
+import { toast } from "react-toastify";
 
 export default function AddTaskModal() {
+  //obteniendo el id del projecto
+  const params = useParams();
+  const projectId = params.projectId!;
+
   const navigate = useNavigate();
   //aca lo estoy usando para extraer datos de la url
   const location = useLocation();
@@ -25,14 +31,31 @@ export default function AddTaskModal() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: initialValues,
   });
 
-  const handleCreateTask = (FormData: TaskFormData) => {
-    console.log(FormData);
+  const handleCreateTask = (formData: TaskFormData) => {
+    const data = {
+      formData,
+      projectId,
+    };
+    mutate(data);
   };
+
+  const { mutate } = useMutation({
+    mutationFn: createTask,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+      //reset resetea el formulario
+      reset();
+    },
+  });
   /*En en el onClose manda a la misma url en la que se encuentra y elimina
   el queryString de la url*/
   return (
