@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import TaskForm from "./TaskForm";
 import { TaskFormData } from "@/types/index";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/api/TaskApi";
 import { toast } from "react-toastify";
 
@@ -51,11 +51,14 @@ export default function AddTaskModal() {
       toast.error(error.message);
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["editProject", projectId] });
       toast.success(data);
       //reset resetea el formulario
       reset();
     },
   });
+
+  const queryClient = useQueryClient();
   /*En en el onClose manda a la misma url en la que se encuentra y elimina
   el queryString de la url*/
   return (
