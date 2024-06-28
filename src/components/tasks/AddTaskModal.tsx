@@ -55,6 +55,8 @@ export default function AddTaskModal() {
       toast.success(data);
       //reset resetea el formulario
       reset();
+      //elimina el querySTring
+      navigate(location.pathname, { replace: true });
     },
   });
 
