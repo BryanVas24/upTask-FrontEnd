@@ -1,5 +1,6 @@
 import { Task } from "@/types/index";
 import TaskCard from "./TaskCard";
+import { StatusTranslations } from "@/locales/es";
 
 type TaskListProps = {
   tasks: Task[];
@@ -8,14 +9,7 @@ type TaskListProps = {
 type GroupedTasks = {
   [key: string]: Task[];
 };
-//diccionario para traducir XD
-const StatusTranslations: { [key: string]: string } = {
-  pending: "Pendiente",
-  onHold: "En espera",
-  inProgress: "En progreso",
-  underReview: "En revisión",
-  completed: "Completada",
-};
+
 //esto es para cambiar color de bordes dinamicamente
 const BorderStatusColor: { [key: string]: string } = {
   pending: "border-t-slate-500",

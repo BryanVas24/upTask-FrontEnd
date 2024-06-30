@@ -6,11 +6,12 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getTaskByID } from "@/api/TaskApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getTaskByID, updateStatus } from "@/api/TaskApi";
 import { toast } from "react-toastify";
 import { formatDate } from "@/utils/utils";
 import { StatusTranslations } from "@/locales/es";
+import { taskStatus } from "@/types/index";
 
 export default function TaskModalDetails() {
   const params = useParams();
@@ -32,6 +33,28 @@ export default function TaskModalDetails() {
     enabled: !!taskId,
   });
 
+  const { mutate } = useMutation({
+    mutationFn: updateStatus,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["editProject", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["task", taskId] });
+      toast.success(data);
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const status = e.target.value as taskStatus;
+    const data = {
+      projectId,
+      taskId,
+      status,
+    };
+    mutate(data);
+  };
+  const queryClient = useQueryClient();
   if (isError) {
     //el error.message viene del backend, se esta extrayendo en la linea del useQuery
     //el  { toastId: "error" } es para evitar que aparezcan 2 toast por el rer reneder
@@ -91,6 +114,7 @@ export default function TaskModalDetails() {
                         Estado Actual: {data.status}
                       </label>
                       <select
+                        onChange={handleChange}
                         defaultValue={data.status}
                         className="w-full p-3 bg-white border border-gray-300"
                       >
