@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
+//esta libreria te permite hacer los cuadritos para nuemros
+import { PinInput, PinInputField } from "@chakra-ui/pin-input";
+import { useState } from "react";
+import { ConfrimToken } from "@/types/index";
 
 export default function ConfirmAccountView() {
+  const [token, setToken] = useState<ConfrimToken["token"]>("");
+  const handleChange = (token: ConfrimToken["token"]) => {
+    setToken(token);
+  };
+  //esto detecta cuando todos  los cuadritos esta llenos con el onComplete
+  const handleComplete = (token: ConfrimToken["token"]) => {};
   return (
     <>
       <h1 className="text-5xl font-black text-white">Confirma tu Cuenta</h1>
@@ -12,6 +22,20 @@ export default function ConfirmAccountView() {
         <label className="font-normal text-2xl text-center block">
           Código de 6 dígitos
         </label>
+        <div className="flex justify-center gap-5 ">
+          <PinInput
+            value={token}
+            onChange={handleChange}
+            onComplete={handleComplete}
+          >
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+            <PinInputField className="w-10 h-10 p-3 rounded-lg border-gray-300 border placeholder-white"></PinInputField>
+          </PinInput>
+        </div>
       </form>
 
       <nav className="mt-10 flex flex-col space-y-4">
