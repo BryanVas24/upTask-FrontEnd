@@ -6,6 +6,7 @@ import EditProjectView from "./views/EditProjectView";
 import ProjectDetailsView from "./views/projects/ProjectDetailsView";
 import AuthLayout from "./layouts/AuthLayout";
 import LoginView from "./views/auth/LoginView";
+import RegisterView from "./views/auth/RegisterView";
 /*el Route que contiene el element es el padre y el que contiene la ruta y la vista es el hijo, 
 index significa que es la pagina principal de esa ruta*/
 export default function Router() {
@@ -26,6 +27,7 @@ export default function Router() {
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="/auth/login" element={<LoginView />} />
+          <Route path="/auth/register" element={<RegisterView />} />
         </Route>
       </Routes>
     </BrowserRouter>
