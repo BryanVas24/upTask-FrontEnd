@@ -2,6 +2,9 @@ import { useForm } from "react-hook-form";
 import { UserRegistrationForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { createAccount } from "@/api/AuthApi";
+import { toast } from "react-toastify";
 
 export default function RegisterView() {
   const initialValues: UserRegistrationForm = {
@@ -19,9 +22,22 @@ export default function RegisterView() {
     formState: { errors },
   } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
 
+  const { mutate } = useMutation({
+    mutationFn: createAccount,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+      reset();
+    },
+  });
+  //watch verifica que las contraseñas sean iguales (es de react-hook-form)
   const password = watch("password");
 
-  const handleRegister = (formData: UserRegistrationForm) => {};
+  const handleRegister = (formData: UserRegistrationForm) => {
+    mutate(formData);
+  };
 
   return (
     <>

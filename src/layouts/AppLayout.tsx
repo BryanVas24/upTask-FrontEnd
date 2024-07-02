@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//siempre que queras que los toast se vean tenes que usar el toast container
 const AppLayout = () => {
   return (
     <>
