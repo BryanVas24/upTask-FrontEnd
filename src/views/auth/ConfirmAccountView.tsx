@@ -3,14 +3,28 @@ import { Link } from "react-router-dom";
 import { PinInput, PinInputField } from "@chakra-ui/pin-input";
 import { useState } from "react";
 import { ConfrimToken } from "@/types/index";
+import { useMutation } from "@tanstack/react-query";
+import { confirmAccount } from "@/api/AuthApi";
+import { toast } from "react-toastify";
 
 export default function ConfirmAccountView() {
   const [token, setToken] = useState<ConfrimToken["token"]>("");
+  const { mutate } = useMutation({
+    mutationFn: confirmAccount,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+    },
+  });
   const handleChange = (token: ConfrimToken["token"]) => {
     setToken(token);
   };
   //esto detecta cuando todos  los cuadritos esta llenos con el onComplete
-  const handleComplete = (token: ConfrimToken["token"]) => {};
+  const handleComplete = (token: ConfrimToken["token"]) => {
+    mutate({ token });
+  };
   return (
     <>
       <h1 className="text-5xl font-black text-white">Confirma tu Cuenta</h1>
