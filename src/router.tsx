@@ -8,6 +8,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import LoginView from "./views/auth/LoginView";
 import RegisterView from "./views/auth/RegisterView";
 import ConfirmAccountView from "./views/auth/ConfirmAccountView";
+import RegquestNewCodeView from "./views/auth/RequestNewCodeView";
 /*el Route que contiene el element es el padre y el que contiene la ruta y la vista es el hijo, 
 index significa que es la pagina principal de esa ruta*/
 export default function Router() {
@@ -33,6 +34,7 @@ export default function Router() {
             path="/auth/confirm-account"
             element={<ConfirmAccountView />}
           />
+          <Route path="/auth/request-code" element={<RegquestNewCodeView />} />
         </Route>
       </Routes>
     </BrowserRouter>
