@@ -18,6 +18,14 @@ export default function LoginView() {
 
   return (
     <>
+      <h1 className="text-5xl font-black text-white">Iniciar sesion</h1>
+      <p className="text-2xl font-light text-white mt-5">
+        Comienza a planear tus proyectos {""}
+        <span className=" text-fuchsia-500 font-bold">
+          {" "}
+          iniciando sesion en este formulario
+        </span>
+      </p>
       <form
         onSubmit={handleSubmit(handleLogin)}
         className="space-y-8 p-10 bg-white"
@@ -71,6 +79,13 @@ export default function LoginView() {
         >
           ¿No tienes una cuenta?{" "}
           <span className="text-fuchsia-500">Crear una</span>
+        </Link>
+        <Link
+          className="text-center text-gray-300 font-normal"
+          to={"/auth/forgot-password"}
+        >
+          ¿Olvidaste tu contraseña?{" "}
+          <span className="text-fuchsia-500">Restablecer</span>
         </Link>
       </nav>
     </>
