@@ -20,7 +20,7 @@ const NewPasswordView = () => {
           token={token}
         />
       ) : (
-        <NewPasswordForm />
+        <NewPasswordForm token={token} />
       )}
     </>
   );
