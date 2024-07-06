@@ -1,9 +1,38 @@
+import { validateToken } from "@/api/AuthApi";
+import { ConfrimToken } from "@/types/index";
 import { PinInput, PinInputField } from "@chakra-ui/pin-input";
+import { useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
-export default function NewPasswordToken() {
-  const handleChange = (token: string) => {};
-  const handleComplete = (token: string) => {};
+type NewPasswordTokenProps = {
+  token: ConfrimToken["token"];
+  setToken: React.Dispatch<React.SetStateAction<string>>;
+  setIsValidToken: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function NewPasswordToken({
+  token,
+  setToken,
+  setIsValidToken,
+}: NewPasswordTokenProps) {
+  const handleChange = (token: string) => {
+    setToken(token);
+  };
+  const { mutate } = useMutation({
+    mutationFn: validateToken,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess(data) {
+      toast.success(data);
+      setIsValidToken(true);
+    },
+  });
+  const handleComplete = (token: string) => {
+    //lo pasas como objeto porque estas usando formData
+    mutate({ token });
+  };
 
   return (
     <>
@@ -13,7 +42,7 @@ export default function NewPasswordToken() {
         </label>
         <div className="flex justify-center gap-5">
           <PinInput
-            value={"123456"}
+            value={token}
             onChange={handleChange}
             onComplete={handleComplete}
           >
