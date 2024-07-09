@@ -14,8 +14,15 @@ export async function createproject(formData: ProjectFormData) {
 
 export async function getAllProjects() {
   try {
+    //tomando el jwt del locale storage
+    const JWtoken = localStorage.getItem("AUTH_TOKEN");
     //recorda que en axios siempre es get el metodo por defecto
-    const { data } = await api("/projects");
+    //envias los headers porque el backend pide un jwt como Bearer
+    const { data } = await api("/projects", {
+      headers: {
+        Authorization: `Bearer ${JWtoken}`,
+      },
+    });
     const response = dashboardProjectsSchema.safeParse(data);
     console.log(data);
     if (response.success) {
