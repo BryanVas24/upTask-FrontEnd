@@ -1,10 +1,17 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "@/hooks/useAuth";
 //siempre que queras que los toast se vean tenes que usar el toast container
 const AppLayout = () => {
+  const { data, isError, isLoading } = useAuth();
+  console.log(data);
+  if (isLoading) return "Cargando...";
+  if (isError) {
+    return <Navigate to="auth/login" />;
+  }
   return (
     <>
       <Header />

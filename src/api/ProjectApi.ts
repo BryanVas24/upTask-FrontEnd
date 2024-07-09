@@ -17,7 +17,7 @@ export async function getAllProjects() {
     //recorda que en axios siempre es get el metodo por defecto
     const { data } = await api("/projects");
     const response = dashboardProjectsSchema.safeParse(data);
-    console.log(data);
+
     if (response.success) {
       return response.data;
     } else {
