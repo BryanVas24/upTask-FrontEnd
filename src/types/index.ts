@@ -41,6 +41,16 @@ export const takSchema = z.object({
 
 export type Task = z.infer<typeof takSchema>;
 export type TaskFormData = Pick<Task, "name" | "description">;
+/*----USUARIOS-------*/
+export const UserSchema = authSchema
+  .pick({
+    name: true,
+    email: true,
+  })
+  .extend({
+    _id: z.string(),
+  });
+export type User = z.infer<typeof UserSchema>;
 /*-----PROJECTOS------*/
 
 export const projetcSchema = z.object({
