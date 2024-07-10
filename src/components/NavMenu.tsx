@@ -3,9 +3,18 @@ import { Popover, Transition } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function NavMenu() {
   const { data } = useAuth();
+  //funcion para cerrar sesion
+  const queryClient = useQueryClient();
+  const logout = () => {
+    //remover token de locale storage
+    localStorage.removeItem("AUTH_TOKEN");
+    //invalidar las queries porque esto queda cacheado
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+  };
   return (
     <Popover className="relative">
       <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 p-1 rounded-lg bg-purple-400">
@@ -33,7 +42,7 @@ export default function NavMenu() {
             <button
               className="block p-2 hover:text-purple-950"
               type="button"
-              onClick={() => {}}
+              onClick={logout}
             >
               Cerrar Sesión
             </button>
