@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getOneProject } from "@/api/ProjectApi";
 import AddTaskModal from "@/components/tasks/AddTaskModal";
@@ -41,6 +41,12 @@ const ProjectDetailsView = () => {
           >
             Agregar tarea
           </button>
+          <Link
+            className="bg-fuchsia-600 hover:bg-fuchsia-700 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
+            to={`/projects/${projectId}/team`}
+          >
+            Ver colaboradores
+          </Link>
         </nav>
         <TaskList tasks={data.tasks} />
         <AddTaskModal />

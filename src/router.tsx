@@ -11,6 +11,7 @@ import ConfirmAccountView from "./views/auth/ConfirmAccountView";
 import RegquestNewCodeView from "./views/auth/RequestNewCodeView";
 import ForgotPasswordView from "./views/auth/ForgotPasswordView";
 import NewPasswordView from "./views/auth/NewPasswordView";
+import ProjectTeamView from "./views/projects/ProjectTeamView";
 /*el Route que contiene el element es el padre y el que contiene la ruta y la vista es el hijo, 
 index significa que es la pagina principal de esa ruta*/
 export default function Router() {
@@ -27,6 +28,10 @@ export default function Router() {
           <Route
             path="/projects/:projectId/details"
             element={<ProjectDetailsView />}
+          />
+          <Route
+            path="/projects/:projectId/team"
+            element={<ProjectTeamView />}
           />
         </Route>
         <Route element={<AuthLayout />}>
