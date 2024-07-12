@@ -1,13 +1,14 @@
 import { AddUserToProject } from "@/api/TeamApi";
 import { TeamMember } from "@/types/index";
 import { useMutation } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 type SearchResultprops = {
   user: TeamMember;
 };
 function SearchResult({ user }: SearchResultprops) {
+  const navigate = useNavigate();
   const params = useParams();
   const projectId = params.projectId!;
   const { mutate } = useMutation({
@@ -17,6 +18,7 @@ function SearchResult({ user }: SearchResultprops) {
     },
     onSuccess: (data) => {
       toast.success(data);
+      navigate(location.pathname, { replace: true });
     },
   });
   const handleAddUserToProject = () => {
