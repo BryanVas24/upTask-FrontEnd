@@ -1,9 +1,10 @@
-import { getProjectMembers } from "@/api/TeamApi";
+import { getProjectMembers, removeUserFromProject } from "@/api/TeamApi";
 import AddMemberModal from "@/components/team/AddMemberModal";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
 
 const ProjectTeamView = () => {
@@ -11,6 +12,16 @@ const ProjectTeamView = () => {
   //extrayendo el id del proyecto
   const params = useParams();
   const projectId = params.projectId!;
+
+  const { mutate } = useMutation({
+    mutationFn: removeUserFromProject,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+    },
+  });
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["projectTeam", projectId],
@@ -83,6 +94,9 @@ const ProjectTeamView = () => {
                           <button
                             type="button"
                             className="block px-3 py-1 text-sm leading-6 text-red-500"
+                            onClick={() =>
+                              mutate({ projectId, userid: member._id })
+                            }
                           >
                             Eliminar del Proyecto
                           </button>
