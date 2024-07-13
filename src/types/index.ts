@@ -58,6 +58,7 @@ export const projetcSchema = z.object({
   projectName: z.string(),
   clientName: z.string(),
   description: z.string(),
+  manager: z.string(UserSchema.pick({ _id: true })),
 });
 
 export const dashboardProjectsSchema = z.array(
@@ -66,6 +67,7 @@ export const dashboardProjectsSchema = z.array(
     projectName: true,
     clientName: true,
     description: true,
+    manager: true,
   })
 );
 //esto es para que el type de Porject tenga la estructura de arriba

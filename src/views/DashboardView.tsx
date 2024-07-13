@@ -5,7 +5,10 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteProject, getAllProjects } from "@/api/ProjectApi";
 import { toast } from "react-toastify";
+import { useAuth } from "@/hooks/useAuth";
 const DashboardView = () => {
+  //asi podes reenombrar los valores
+  const { data: user, isLoading: authLoading } = useAuth();
   //aca estas destructurando datos de useQuery
   const { data, isLoading } = useQuery({
     //el querykey debe ser unico, literalmente no lo podes repetir ni en otro componente
@@ -24,10 +27,10 @@ const DashboardView = () => {
     },
   });
 
-  if (isLoading) return "Cargando...";
+  if (isLoading && authLoading) return "Cargando...";
   //este if hace que el componente se renderise solo cuando data tenga algo
 
-  if (data)
+  if (data && user)
     return (
       <>
         <h1 className="text-5xl font-black">Mis proyectos</h1>
@@ -95,25 +98,29 @@ const DashboardView = () => {
                             Ver Proyecto
                           </Link>
                         </Menu.Item>
-                        <Menu.Item>
-                          <Link
-                            to={`/projects/${project._id}/edit`}
-                            className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                          >
-                            Editar Proyecto
-                          </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                          <button
-                            type="button"
-                            className="block px-3 py-1 text-sm leading-6 text-red-500"
-                            onClick={() => {
-                              mutate(project._id);
-                            }}
-                          >
-                            Eliminar Proyecto
-                          </button>
-                        </Menu.Item>
+                        {project.manager === user._id && (
+                          <>
+                            <Menu.Item>
+                              <Link
+                                to={`/projects/${project._id}/edit`}
+                                className="block px-3 py-1 text-sm leading-6 text-gray-900"
+                              >
+                                Editar Proyecto
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <button
+                                type="button"
+                                className="block px-3 py-1 text-sm leading-6 text-red-500"
+                                onClick={() => {
+                                  mutate(project._id);
+                                }}
+                              >
+                                Eliminar Proyecto
+                              </button>
+                            </Menu.Item>
+                          </>
+                        )}
                       </Menu.Items>
                     </Transition>
                   </Menu>
