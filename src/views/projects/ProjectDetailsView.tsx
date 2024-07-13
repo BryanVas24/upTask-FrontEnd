@@ -5,8 +5,11 @@ import AddTaskModal from "@/components/tasks/AddTaskModal";
 import TaskList from "@/components/tasks/TaskList";
 import EditTaskData from "@/components/tasks/EditTaskData";
 import TaskModalDetails from "@/components/tasks/TaskModalDetails";
+import { useAuth } from "@/hooks/useAuth";
+import { isManager } from "@/utils/polices";
 
 const ProjectDetailsView = () => {
+  const { data: user, isLoading: loading } = useAuth();
   const navigate = useNavigate();
   //sirve para obtener datos de la url
   const params = useParams();
@@ -21,12 +24,12 @@ const ProjectDetailsView = () => {
     retry: false,
   });
   //si esta cargando
-  if (isLoading) return <div>Buscando proyecto...</div>;
+  if (isLoading && loading) return <div>Buscando proyecto...</div>;
   //si ocurre un error
   if (error) return <Navigate to={"/404"} />;
 
   //si data existe retorna este componente
-  if (data)
+  if (data && user)
     return (
       <>
         <h1 className="text-5xl font-black">{data.projectName}</h1>
@@ -34,20 +37,23 @@ const ProjectDetailsView = () => {
         <p className="text-2xl font-light text-gray-500 mt-5">
           {data.description}
         </p>
-        <nav className="my-5 flex gap-3">
-          <button
-            onClick={() => navigate(location.pathname + "?newTask=true")}
-            className="bg-purple-400 hover:bg-purple-500 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
-          >
-            Agregar tarea
-          </button>
-          <Link
-            className="bg-fuchsia-600 hover:bg-fuchsia-700 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
-            to={`/projects/${projectId}/team`}
-          >
-            Ver colaboradores
-          </Link>
-        </nav>
+        {isManager(data.manager, user._id) && (
+          <nav className="my-5 flex gap-3">
+            <button
+              onClick={() => navigate(location.pathname + "?newTask=true")}
+              className="bg-purple-400 hover:bg-purple-500 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
+            >
+              Agregar tarea
+            </button>
+            <Link
+              className="bg-fuchsia-600 hover:bg-fuchsia-700 px-5 py-5 text-white text-xl font-bold cursor-pointer transition-colors"
+              to={`/projects/${projectId}/team`}
+            >
+              Ver colaboradores
+            </Link>
+          </nav>
+        )}
+
         <TaskList tasks={data.tasks} />
         <AddTaskModal />
 
