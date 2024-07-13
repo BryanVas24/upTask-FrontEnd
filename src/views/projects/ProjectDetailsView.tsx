@@ -7,6 +7,7 @@ import EditTaskData from "@/components/tasks/EditTaskData";
 import TaskModalDetails from "@/components/tasks/TaskModalDetails";
 import { useAuth } from "@/hooks/useAuth";
 import { isManager } from "@/utils/polices";
+import { useMemo } from "react";
 
 const ProjectDetailsView = () => {
   const { data: user, isLoading: loading } = useAuth();
@@ -23,11 +24,12 @@ const ProjectDetailsView = () => {
     //son las veces que intentara hacer el llamado
     retry: false,
   });
+  const canEdit = useMemo(() => data?.manager === user?._id, [data, user]);
+
   //si esta cargando
   if (isLoading && loading) return <div>Buscando proyecto...</div>;
   //si ocurre un error
   if (error) return <Navigate to={"/404"} />;
-
   //si data existe retorna este componente
   if (data && user)
     return (
@@ -54,7 +56,7 @@ const ProjectDetailsView = () => {
           </nav>
         )}
 
-        <TaskList tasks={data.tasks} />
+        <TaskList tasks={data.tasks} canEdit={canEdit} />
         <AddTaskModal />
 
         <EditTaskData />
