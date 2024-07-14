@@ -30,6 +30,7 @@ export async function getTaskByID({
   try {
     const url = `/projects/${projectId}/tasks/${taskId}`;
     const { data } = await api(url);
+    console.log(data);
     const response = takSchema.safeParse(data);
     if (response.success) {
       return response.data;

@@ -1,7 +1,6 @@
 import { z } from "zod";
-/*-'-'Usuarios-''--'*/
+/*-'-'auth-''--'*/
 
-/*--TAREAS---*/
 const authSchema = z.object({
   name: z.string(),
   email: z.string().email(),
@@ -21,6 +20,17 @@ export type ForgotPasswordForm = Pick<Auth, "email">;
 export type NewPasswordForm = Pick<Auth, "password" | "password_confirmation">;
 
 export type ConfrimToken = Pick<Auth, "token">;
+/*----USUARIOS-------*/
+export const UserSchema = authSchema
+  .pick({
+    name: true,
+    email: true,
+  })
+  .extend({
+    _id: z.string(),
+  });
+export type User = z.infer<typeof UserSchema>;
+/*--TAREAS---*/
 export const taskStatusSchema = z.enum([
   "pending",
   "onHold",
@@ -37,20 +47,12 @@ export const takSchema = z.object({
   status: taskStatusSchema,
   createdAt: z.string(),
   updatedAt: z.string(),
+  completedBy: UserSchema.or(z.null()),
 });
 
 export type Task = z.infer<typeof takSchema>;
 export type TaskFormData = Pick<Task, "name" | "description">;
-/*----USUARIOS-------*/
-export const UserSchema = authSchema
-  .pick({
-    name: true,
-    email: true,
-  })
-  .extend({
-    _id: z.string(),
-  });
-export type User = z.infer<typeof UserSchema>;
+
 /*-----PROJECTOS------*/
 
 export const projetcSchema = z.object({
