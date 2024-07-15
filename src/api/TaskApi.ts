@@ -30,11 +30,11 @@ export async function getTaskByID({
   try {
     const url = `/projects/${projectId}/tasks/${taskId}`;
     const { data } = await api(url);
-    return data;
-    /*const response = takSchema.safeParse(data);
+
+    const response = takSchema.safeParse(data);
     if (response.success) {
       return response.data;
-    }*/
+    }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error);
