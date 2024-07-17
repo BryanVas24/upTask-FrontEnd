@@ -36,6 +36,7 @@ export default function Router() {
             path="/projects/:projectId/team"
             element={<ProjectTeamView />}
           />
+
           <Route element={<ProfileLayout />}>
             <Route path="/profile" element={<ProfileView />} />
             <Route
