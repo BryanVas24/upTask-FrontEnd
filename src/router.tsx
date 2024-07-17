@@ -13,7 +13,7 @@ import ForgotPasswordView from "./views/auth/ForgotPasswordView";
 import NewPasswordView from "./views/auth/NewPasswordView";
 import ProjectTeamView from "./views/projects/ProjectTeamView";
 import ProfileView from "./views/profile/ProfileView";
-import ChangePasswordview from "./views/profile/ChangePasswordview";
+import ChangePasswordView from "./views/profile/ChangePasswordView";
 import ProfileLayout from "./layouts/ProfileLayout";
 /*el Route que contiene el element es el padre y el que contiene la ruta y la vista es el hijo, 
 index significa que es la pagina principal de esa ruta*/
@@ -41,7 +41,7 @@ export default function Router() {
             <Route path="/profile" element={<ProfileView />} />
             <Route
               path="/profile/ChangePassword"
-              element={<ChangePasswordview />}
+              element={<ChangePasswordView />}
             />
           </Route>
         </Route>
