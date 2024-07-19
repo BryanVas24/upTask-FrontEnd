@@ -23,6 +23,7 @@ export type UpdateCurrentPasswordForm = Pick<
   Auth,
   "current_password" | "password" | "password_confirmation"
 >;
+export type chekPasswordForm = Pick<Auth, "password">;
 export type ConfrimToken = Pick<Auth, "token">;
 /*----USUARIOS-------*/
 export const UserSchema = authSchema

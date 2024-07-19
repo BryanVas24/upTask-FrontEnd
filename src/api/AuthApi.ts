@@ -8,6 +8,7 @@ import {
   User,
   UserLoginForm,
   UserRegistrationForm,
+  chekPasswordForm,
 } from "../types";
 
 export async function createAccount(formData: UserRegistrationForm) {
@@ -104,6 +105,17 @@ export async function updatePasswordWhitToken({
 export async function getUser() {
   try {
     const { data } = await api<User>("/auth/user");
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+}
+
+export async function checkPassword(formData: chekPasswordForm) {
+  try {
+    const { data } = await api.post<User>("/auth/check-password", formData);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
