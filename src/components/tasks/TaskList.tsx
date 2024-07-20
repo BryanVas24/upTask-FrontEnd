@@ -1,9 +1,13 @@
-import { Task } from "@/types/index";
+import { Task, taskStatus } from "@/types/index";
 import TaskCard from "./TaskCard";
 import { StatusTranslations } from "@/locales/es";
 import DropTask from "./DropTask";
 //siempre que usas drag and drop necesitas este context
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateStatus } from "@/api/TaskApi";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 type TaskListProps = {
   tasks: Task[];
@@ -31,17 +35,42 @@ const initialStatusGroups: GroupedTasks = {
   completed: [],
 };
 const TaskList = ({ tasks, canEdit }: TaskListProps) => {
+  const params = useParams();
+  const projectId = params.projectId!;
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: updateStatus,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["editProject", projectId] });
+      toast.success(data);
+    },
+  });
+
   const groupedTasks = tasks.reduce((acc, task) => {
     let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
     currentGroup = [...currentGroup, task];
     return { ...acc, [task.status]: currentGroup };
   }, initialStatusGroups);
+  //el onDragEnd en el DndContext es para indicar que pasa cuando soltas algo en el
+  const handleDragEnd = (event: DragEndEvent) => {
+    //esto es para conseguir en donde se esta enviando
+    const { over, active } = event;
+    if (over && over.id) {
+      const taskId = active.id.toString();
+      const status = over.id as taskStatus;
+      mutate({ projectId, taskId, status });
+    }
+  };
   return (
     <>
       <h2 className="text-5xl font-black my-10">Tareas</h2>
 
       <div className="flex gap-5 overflow-x-scroll 2xl:overflow-auto pb-32">
-        <DndContext>
+        <DndContext onDragEnd={handleDragEnd}>
           {Object.entries(groupedTasks).map(([status, tasks]) => (
             <div key={status} className="min-w-[300px] 2xl:min-w-0 2xl:w-1/5">
               <h3
@@ -49,7 +78,7 @@ const TaskList = ({ tasks, canEdit }: TaskListProps) => {
               >
                 {StatusTranslations[status]}
               </h3>
-              <DropTask />
+              <DropTask status={status} />
               <ul className="mt-5 space-y-5">
                 {tasks.length === 0 ? (
                   <li className="text-gray-500 text-center pt-3">
