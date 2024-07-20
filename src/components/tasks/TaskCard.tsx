@@ -1,5 +1,6 @@
 import { deleteTask } from "@/api/TaskApi";
 import { Task } from "@/types/index";
+import { useDraggable } from "@dnd-kit/core";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +13,17 @@ type TaskCardProps = {
   canEdit: boolean;
 };
 const TaskCard = ({ task, canEdit }: TaskCardProps) => {
+  //sirve para el drag and drop y a ley tenes que pasarle un id unico
+
+  /*attributes: es necesario
+  listeners: son una serie de funciones que permiten habilitar los elementos html estatico 
+  setNoderef: sirve para decir a qu elemento se le va aplicar el draggable
+  transform: es para aplicarles algo de css a esos elementos*/
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task._id,
+  });
+
   const navigate = useNavigate();
 
   const params = useParams();
@@ -30,10 +42,21 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
       navigate(location.pathname, { replace: true });
     },
   });
+
+  const style = transform
+    ? //esto te permite moverlo en horizontal vertical y en el fondo
+      { transform: `translate3d(${transform.x}px,${transform.y}px,0)` }
+    : undefined;
   return (
     <div>
       <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
-        <div className="min-w-0 flex flex-col gap-y-4">
+        <div
+          {...listeners}
+          {...attributes}
+          ref={setNodeRef}
+          style={style}
+          className="min-w-0 flex flex-col gap-y-4"
+        >
           <button
             type="button"
             className="text-xl font-bold text-slate-600 text-left"
