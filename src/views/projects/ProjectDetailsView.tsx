@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getOneProject } from "@/api/ProjectApi";
+import { getOneFullProject } from "@/api/ProjectApi";
 import AddTaskModal from "@/components/tasks/AddTaskModal";
 import TaskList from "@/components/tasks/TaskList";
 import EditTaskData from "@/components/tasks/EditTaskData";
@@ -20,7 +20,7 @@ const ProjectDetailsView = () => {
   const { data, error, isLoading } = useQuery({
     //acá asignas dos query keys porque recorda que debe se runico
     queryKey: ["editProject", projectId],
-    queryFn: () => getOneProject(projectId),
+    queryFn: () => getOneFullProject(projectId),
     //son las veces que intentara hacer el llamado
     retry: false,
   });

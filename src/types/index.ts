@@ -76,6 +76,13 @@ export const takSchema = z.object({
 
 export type Task = z.infer<typeof takSchema>;
 export type TaskFormData = Pick<Task, "name" | "description">;
+export type Taskproject = z.infer<typeof taskProjectSchema>;
+export const taskProjectSchema = takSchema.pick({
+  _id: true,
+  name: true,
+  description: true,
+  status: true,
+});
 
 /*-----PROJECTOS------*/
 
@@ -85,6 +92,8 @@ export const projetcSchema = z.object({
   clientName: z.string(),
   description: z.string(),
   manager: z.string(UserSchema.pick({ _id: true })),
+  tasks: z.array(taskProjectSchema),
+  team: z.array(z.string(UserSchema.pick({ _id: true }))),
 });
 
 export const dashboardProjectsSchema = z.array(
@@ -96,6 +105,13 @@ export const dashboardProjectsSchema = z.array(
     manager: true,
   })
 );
+
+export const EditProjectSchema = projetcSchema.pick({
+  projectName: true,
+  clientName: true,
+  description: true,
+});
+
 //esto es para que el type de Porject tenga la estructura de arriba
 export type Project = z.infer<typeof projetcSchema>;
 export type ProjectFormData = Pick<

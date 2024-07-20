@@ -1,5 +1,5 @@
 import { deleteTask } from "@/api/TaskApi";
-import { Task } from "@/types/index";
+import { Taskproject } from "@/types/index";
 import { useDraggable } from "@dnd-kit/core";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
 
 type TaskCardProps = {
-  task: Task;
+  task: Taskproject;
   canEdit: boolean;
 };
 const TaskCard = ({ task, canEdit }: TaskCardProps) => {
@@ -45,7 +45,15 @@ const TaskCard = ({ task, canEdit }: TaskCardProps) => {
 
   const style = transform
     ? //esto te permite moverlo en horizontal vertical y en el fondo
-      { transform: `translate3d(${transform.x}px,${transform.y}px,0)` }
+      {
+        transform: `translate3d(${transform.x}px,${transform.y}px,0)`,
+        padding: "1.25rem",
+        backgorundColor: "#FFF",
+        width: "300px",
+        display: "flex",
+        borderWidth: "1px",
+        borderColor: "rgb(203 213 225 / var(--tw-border-opacity))",
+      }
     : undefined;
   return (
     <div>

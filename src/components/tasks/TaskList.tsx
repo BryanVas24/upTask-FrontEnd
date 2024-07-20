@@ -1,4 +1,4 @@
-import { Task, taskStatus } from "@/types/index";
+import { Project, Taskproject, taskStatus } from "@/types/index";
 import TaskCard from "./TaskCard";
 import { StatusTranslations } from "@/locales/es";
 import DropTask from "./DropTask";
@@ -10,12 +10,12 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 type TaskListProps = {
-  tasks: Task[];
+  tasks: Taskproject[];
   canEdit: boolean;
 };
 //yipo de la lista inicial
 type GroupedTasks = {
-  [key: string]: Task[];
+  [key: string]: Taskproject[];
 };
 
 //esto es para cambiar color de bordes dinamicamente
@@ -63,6 +63,20 @@ const TaskList = ({ tasks, canEdit }: TaskListProps) => {
       const taskId = active.id.toString();
       const status = over.id as taskStatus;
       mutate({ projectId, taskId, status });
+      //te permite agregar datos adicionales o actualizarlos para que no espere que se invaliden los queries para actualizarlos
+      //se les conocen como actualizaciones optimistas
+      queryClient.setQueryData(["project", projectId], (oldData: Project) => {
+        const updatedTask = oldData.tasks.map((task) => {
+          if (task._id === taskId) {
+            return { ...task, status };
+          }
+          return task;
+        });
+        return {
+          ...oldData,
+          tasks: updatedTask,
+        };
+      });
     }
   };
   return (
